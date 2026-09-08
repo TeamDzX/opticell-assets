@@ -464,13 +464,14 @@ def clean_body(text: object) -> str:
     return body
 
 
-def write_workshop(releases: list[Release], today: dt.date) -> tuple[str, list[str]]:
-    """Returns (intro, one body per release), templated where the model failed
-    or said something that did not survive the checks."""
-    intro = template_intro(releases, today)
-    bodies = [template_item(r) for r in releases]
+def write_workshop(releases: list[Release],
+                   today: dt.date) -> tuple[str | None, dict[int, str]]:
+    """Returns ONLY what the model actually wrote and that survived the checks:
+    (intro or None, {release index: body}). Choosing the fallback is the
+    caller's job -- it knows what yesterday said, and yesterday's approved copy
+    for the same release beats a template."""
     if not releases:
-        return intro, bodies
+        return None, {}
 
     lines = []
     for index, release in enumerate(releases):
@@ -495,8 +496,9 @@ def write_workshop(releases: list[Release], today: dt.date) -> tuple[str, list[s
 
     data = call_model(prompt, "workshop strip")
     if not data:
-        return intro, bodies
+        return None, {}
 
+    intro = None
     allowed_versions = {r.version for r in releases}
     for r in releases:                     # "2.1.1" makes "2.1" legitimate too
         allowed_versions.update(re.findall(r"\d+\.\d+", r.version))
@@ -510,7 +512,7 @@ def write_workshop(releases: list[Release], today: dt.date) -> tuple[str, list[s
             intro = candidate
 
     items = data.get("items")
-    by_index: dict[int, str] = {}
+    raw: dict[int, str] = {}
     if isinstance(items, list):
         for item in items:
             if not isinstance(item, dict):
@@ -519,10 +521,11 @@ def write_workshop(releases: list[Release], today: dt.date) -> tuple[str, list[s
                 index = int(item.get("index"))
             except (TypeError, ValueError):
                 continue
-            by_index[index] = clean_body(item.get("body"))
+            raw[index] = clean_body(item.get("body"))
 
+    accepted: dict[int, str] = {}
     for index, release in enumerate(releases):
-        body = by_index.get(index, "")
+        body = raw.get(index, "")
         if not body:
             continue
         if len(body) > MAX_ITEM_CHARS * 2:
@@ -536,8 +539,8 @@ def write_workshop(releases: list[Release], today: dt.date) -> tuple[str, list[s
         if bad:
             log(f"  dropped copy for {release.short_name}: invented version {bad}")
             continue
-        bodies[index] = body
-    return intro, bodies
+        accepted[index] = body
+    return intro, accepted
 
 
 def write_principles() -> dict[str, str]:
@@ -601,17 +604,21 @@ def write_principles() -> dict[str, str]:
 
 def build_edition(today: dt.date, window_days: int, use_llm: bool,
                   do_principles: bool = True,
-                  inherited: dict[str, str] | None = None) -> dict:
-    """`inherited` is the previous edition's principles, carried forward when
-    we are not regenerating them. Blanking them instead would drop the page
-    back to its static copy, which is not what "leave the manifesto alone"
-    should mean -- the last APPROVED set is the thing worth keeping."""
+                  inherited: dict[str, str] | None = None,
+                  inherited_items: dict[tuple[str, str], str] | None = None,
+                  inherited_intro: str | None = None) -> dict:
+    """`inherited*` is what the last edition said. It is preferred over a
+    template whenever the model cannot be reached, because yesterday's approved
+    prose about a release describes that release just as well today -- and the
+    server is offline until 07:00, so a run that lands early must not quietly
+    replace good copy with "X 4.3.1 is live on the App Store"."""
     log("Facts:")
     releases = fetch_releases(today, window_days)
+    inherited_items = inherited_items or {}
 
     log("Copy:")
     if use_llm:
-        intro, bodies = write_workshop(releases, today)
+        model_intro, model_bodies = write_workshop(releases, today)
         if do_principles:
             principles = write_principles()
         else:
@@ -621,9 +628,35 @@ def build_edition(today: dt.date, window_days: int, use_llm: bool,
                 "  --no-principles: nothing to carry forward; the page keeps its own copy")
     else:
         log("  --no-llm: templates only")
-        intro = template_intro(releases, today)
-        bodies = [template_item(r) for r in releases]
+        model_intro, model_bodies = None, {}
         principles = dict(inherited or {})
+
+    # Per item: what the model just wrote, else what the last edition said about
+    # that exact app AND version, else the template.
+    bodies, reused = [], 0
+    for index, release in enumerate(releases):
+        if index in model_bodies:
+            bodies.append(model_bodies[index])
+        elif (release.short_name, release.version) in inherited_items:
+            bodies.append(inherited_items[(release.short_name, release.version)])
+            reused += 1
+        else:
+            bodies.append(template_item(release))
+
+    keys = [(r.short_name, r.version) for r in releases]
+    if model_intro:
+        intro = model_intro
+    elif inherited_intro and all(k in inherited_items for k in keys) and keys:
+        # Only safe when the previous edition covered exactly these releases;
+        # otherwise the sentence could summarise apps no longer on the strip.
+        intro = inherited_intro
+        reused += 1
+    else:
+        intro = template_intro(releases, today)
+
+    if reused:
+        log(f"  reused {reused} line(s) from the last edition rather than "
+            f"falling back to templates")
 
     published = dt.datetime.combine(today, dt.time(0, 0), tzinfo=dt.timezone.utc)
     return {
@@ -689,15 +722,31 @@ def main() -> int:
     if not isinstance(existing, dict):
         existing = {}
 
-    # The newest edition already on file supplies the principles to carry
-    # forward. Its own id may be today's, on a re-run.
-    prior = next((e for e in existing.get("editions", [])
-                  if isinstance(e, dict) and isinstance(e.get("principles"), dict)
-                  and e["principles"]), None)
+    # What previous editions said, newest first -- the source for every
+    # carry-forward. merge() keeps `editions` newest-first, so the first entry
+    # to claim a key wins.
+    editions = [e for e in existing.get("editions", []) if isinstance(e, dict)]
+
+    prior = next((e for e in editions
+                  if isinstance(e.get("principles"), dict) and e["principles"]), None)
+
+    inherited_items: dict[tuple[str, str], str] = {}
+    for e in editions:
+        for item in e.get("items", []) or []:
+            if not isinstance(item, dict):
+                continue
+            key = (str(item.get("app", "")), str(item.get("version", "")))
+            body = str(item.get("body", "")).strip()
+            if all(key) and body and key not in inherited_items:
+                inherited_items[key] = body
+    inherited_intro = next((str(e.get("intro", "")).strip() for e in editions
+                            if str(e.get("intro", "")).strip()), None)
 
     edition = build_edition(today, args.days, not args.no_llm,
                             do_principles=not args.no_principles,
-                            inherited=(prior or {}).get("principles"))
+                            inherited=(prior or {}).get("principles"),
+                            inherited_items=inherited_items,
+                            inherited_intro=inherited_intro)
     if not edition["items"] and not edition["principles"]:
         log("Nothing to publish: no recent releases and no principle copy.")
         return 1

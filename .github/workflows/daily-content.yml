@@ -24,10 +24,15 @@ name: Daily content
 
 on:
   schedule:
-    # 06:40 UTC. Apple's storefront caches settle overnight, so a release
-    # approved late yesterday is visible by now. GitHub's cron is best-effort
-    # and often runs late under load; nothing here is time-critical.
-    - cron: '40 6 * * *'
+    # 07:40 UTC. The LLM box is offline until 07:00, and GitHub cron is fixed to
+    # UTC -- it does NOT follow British Summer Time. So this has to clear 07:00
+    # UTC, not 07:00 local: in summer 07:40 UTC is 08:40 BST, in winter it is
+    # 07:40 GMT, and both are safely after the server comes up. The earlier
+    # 06:40 slot fired BEFORE the box was reachable every single day.
+    # Apple's storefront caches have also settled by now, so a release approved
+    # late yesterday is visible. GitHub's cron is best-effort and often runs
+    # late under load -- late is harmless here, early is not.
+    - cron: '40 7 * * *'
   workflow_dispatch:
     inputs:
       days:
@@ -83,7 +88,32 @@ jobs:
             args+=(--no-principles)
           fi
           echo "Running: build_content.py ${args[*]}"
-          python3 tools/build_content.py "${args[@]}"
+          # pipefail so a failing generator still fails the step; process
+          # substitution would race the next step's read of the log.
+          set -o pipefail
+          python3 tools/build_content.py "${args[@]}" 2>&1 | tee /tmp/build.log
+
+      # A silent fallback now looks exactly like a success -- the copy is
+      # simply carried forward -- so an unreachable server would go unnoticed
+      # for weeks. Say so on the run summary instead.
+      - name: Report which writer was used
+        if: always()
+        run: |
+          if grep -q "falling back" /tmp/build.log 2>/dev/null; then
+            {
+              echo "### :warning: jarvis was NOT reached"
+              echo
+              echo "Copy was carried forward from the last edition, or templated."
+              echo "Check the box is up and the token is valid:"
+              echo
+              echo '```'
+              grep "falling back" /tmp/build.log
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          elif grep -q "written by" /tmp/build.log 2>/dev/null; then
+            echo "### :white_check_mark: Written by jarvis" >> "$GITHUB_STEP_SUMMARY"
+            grep "written by" /tmp/build.log >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       # A malformed file would be served straight to the live site, where the
       # page silently ignores it. Better to fail the job here.

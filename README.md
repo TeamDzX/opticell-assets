@@ -40,9 +40,16 @@ not flat writing — read the prose before it replaces what is live.
 
 ### What runs when
 
-`.github/workflows/daily-content.yml` runs at **06:40 UTC daily**, and commits
+`.github/workflows/daily-content.yml` runs at **07:40 UTC daily**, and commits
 `content.json` straight to `main` if it changed. Nobody needs to run anything
 by hand.
+
+**Why 07:40 and not earlier.** The LLM box is offline until 07:00, and GitHub's
+cron is fixed to UTC — it does not follow British Summer Time. So the slot has
+to clear 07:00 *UTC*, not 07:00 local: 07:40 UTC is 08:40 BST in summer and
+07:40 GMT in winter, safely after the server is up either way. If the server's
+hours change, move this — and remember that "7am" in London is 06:00 UTC for
+half the year.
 
 | | Strip | Principles |
 |---|---|---|
@@ -94,7 +101,12 @@ Change a card's subject there, not in the prompt.
 
 Every failure path leaves the page exactly as it shipped:
 
-- Server down, bad token, non-JSON reply → templated prose, edition still publishes.
+- Server down, bad token, non-JSON reply → **the last edition's copy for that
+  exact app and version is reused**, and only a release nothing has ever been
+  written about falls back to a template. An outage costs the page nothing, and
+  cannot quietly replace approved prose with "X 4.3.1 is live on the App Store".
+  The run summary says which writer was used, so a server that stays
+  unreachable is visible rather than silent.
 - A principle the model got wrong → omitted here, so home.html keeps its own copy.
 - Fetch fails in the browser, or `raw.githubusercontent` is down → jsDelivr is
   tried, then the strip stays hidden.
