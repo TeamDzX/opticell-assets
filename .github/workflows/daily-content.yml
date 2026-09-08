@@ -1,0 +1,103 @@
+name: Daily content
+
+# Writes content.json — the dated "from the workshop" strip and the manifesto
+# copy that home.html fetches. Same arrangement as E-Grid's weekly digest: the
+# model runs HERE, never in the visitor's browser, because home.html is served
+# in a public Wix iframe and can hold no credentials.
+#
+# WHAT THE SCHEDULE DOES AND DOES NOT REWRITE
+# The daily run regenerates the strip only. The seven manifesto principles are
+# reviewed brand copy, so they are carried forward untouched — the guards catch
+# a false claim, but nothing catches copy that is merely weaker than what it
+# replaced, and publishing a new manifesto every morning that nobody has read
+# is not worth the freshness. To regenerate them, run this workflow by hand
+# with "Regenerate principles" ticked, and read the diff before you keep it.
+#
+# The job needs the token as a repository secret (Settings → Secrets and
+# variables → Actions). Without OPTICELL_LLM_KEY it still runs and still
+# publishes — with templated prose instead of jarvis's. A missing secret
+# downgrades the writing, never the page.
+#
+#   OPTICELL_LLM_KEY    bearer token for the server        (required for prose)
+#   OPTICELL_LLM_BASE   default https://optidns.uk         (optional)
+#   OPTICELL_LLM_MODEL  default jarvis:26b                 (optional)
+
+on:
+  schedule:
+    # 06:40 UTC. Apple's storefront caches settle overnight, so a release
+    # approved late yesterday is visible by now. GitHub's cron is best-effort
+    # and often runs late under load; nothing here is time-critical.
+    - cron: '40 6 * * *'
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'How many days back counts as a recent update'
+        required: false
+        default: '45'
+      principles:
+        description: 'Regenerate the seven manifesto principles (review the diff!)'
+        type: boolean
+        required: false
+        default: false
+      no_llm:
+        description: 'Skip the model and publish templated prose'
+        type: boolean
+        required: false
+        default: false
+
+concurrency:
+  group: daily-content
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Pure stdlib on purpose — no requirements file, nothing to keep pinned.
+      - name: Build content.json
+        env:
+          MYLLM_KEY: ${{ secrets.OPTICELL_LLM_KEY }}
+          MYLLM_BASE: ${{ secrets.OPTICELL_LLM_BASE || 'https://optidns.uk' }}
+          MYLLM_MODEL: ${{ secrets.OPTICELL_LLM_MODEL || 'jarvis:26b' }}
+          MYLLM_TIMEOUT: '300'
+          DAYS: ${{ github.event.inputs.days || '45' }}
+          WANT_PRINCIPLES: ${{ github.event.inputs.principles }}
+          NO_LLM: ${{ github.event.inputs.no_llm }}
+        run: |
+          args=(--days "$DAYS")
+          if [ "$NO_LLM" = "true" ]; then
+            args+=(--no-llm)
+          fi
+          # Unticked, absent (the schedule) or anything but "true" => the
+          # manifesto is carried forward, not rewritten.
+          if [ "$WANT_PRINCIPLES" != "true" ]; then
+            args+=(--no-principles)
+          fi
+          echo "Running: build_content.py ${args[*]}"
+          python3 tools/build_content.py "${args[@]}"
+
+      # A malformed file would be served straight to the live site, where the
+      # page silently ignores it. Better to fail the job here.
+      - name: Validate
+        run: python3 -m json.tool content.json > /dev/null
+
+      - name: Commit if it changed
+        run: |
+          if git diff --quiet -- content.json; then
+            echo "No change today."
+            exit 0
+          fi
+          git config user.name  "opticell-content-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content.json
+          git commit -m "Content: $(date -u +%Y-%m-%d) edition"
+          git push
