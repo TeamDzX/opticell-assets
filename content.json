@@ -1,6 +1,6 @@
 {
   "schema": 2,
-  "generatedAt": "2026-09-09T20:11:32Z",
+  "generatedAt": "2026-09-09T20:12:16Z",
   "editions": [
     {
       "id": "2026-09-09",
@@ -9,28 +9,28 @@
       "publishedAt": "2026-09-09T00:00:00Z",
       "expiresAt": "2026-09-19T00:00:00Z",
       "dateline": "9 September 2026",
-      "intro": "Recently out of the workshop: LinkFindr, Project Manager and MyLLM.",
+      "intro": "Recent updates focus on improving reliability, fixing sync issues, and making our apps more responsive during heavy tasks.",
       "items": [
         {
           "app": "LinkFindr",
           "version": "2.3",
           "date": "2026-09-09",
           "url": "https://apps.apple.com/gb/app/linkfindr/id6760857542?uo=4",
-          "body": "LinkFindr 2.3 is live on the App Store, released 9 September 2026."
+          "body": "LinkFindr now features working iCloud sync with a clear status line. You can use a toggle in settings to turn sync off if you prefer to keep your links only on this device."
         },
         {
           "app": "Project Manager",
           "version": "4.4",
           "date": "2026-09-08",
           "url": "https://apps.apple.com/gb/app/project-manager-workflow/id6761440692?uo=4",
-          "body": "Project Manager now features a more intuitive Inbox. You can swipe conversations to manage read status or open tasks directly. iCloud sync ensures your read/unread status stays consistent across all devices."
+          "body": "Project Manager introduces a more functional inbox where you can swipe to manage threads and view task details without leaving the list. iCloud sync now ensures read status follows you."
         },
         {
           "app": "MyLLM",
           "version": "5.2",
           "date": "2026-09-08",
           "url": "https://apps.apple.com/gb/app/myllm-local-ai-agent/id6760704297?uo=4",
-          "body": "MyLLM now displays on-device replies as they are being written. The app remains responsive and scrollable while the model is generating text, and you can stop a response at any time."
+          "body": "MyLLM now displays on-device replies as they are being written so you can see progress. The app remains usable and scrollable while the model is generating an answer."
         }
       ],
       "principles": {
