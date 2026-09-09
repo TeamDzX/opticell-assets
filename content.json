@@ -1,7 +1,48 @@
 {
   "schema": 1,
-  "generatedAt": "2026-09-08T09:35:54Z",
+  "generatedAt": "2026-09-09T12:28:19Z",
   "editions": [
+    {
+      "id": "2026-09-09",
+      "kind": "workshop",
+      "label": "from the workshop",
+      "publishedAt": "2026-09-09T00:00:00Z",
+      "expiresAt": "2026-09-19T00:00:00Z",
+      "dateline": "9 September 2026",
+      "intro": "Recent updates to our apps focus on improving usability and fixing reported issues across our macOS and mobile software.",
+      "items": [
+        {
+          "app": "Project Manager",
+          "version": "4.4",
+          "date": "2026-09-08",
+          "url": "https://apps.apple.com/gb/app/project-manager-workflow/id6761440692?uo=4",
+          "body": "Project Manager now features a more intuitive Inbox. You can swipe conversations to manage read status or open tasks directly. iCloud sync ensures your read/unread status stays consistent across all devices."
+        },
+        {
+          "app": "MyLLM",
+          "version": "5.2",
+          "date": "2026-09-08",
+          "url": "https://apps.apple.com/gb/app/myllm-local-ai-agent/id6760704297?uo=4",
+          "body": "MyLLM now displays on-device replies as they are being written. The app remains responsive and scrollable while the model is generating text, and you can stop a response at any time."
+        },
+        {
+          "app": "Hanyu",
+          "version": "3.2.5",
+          "date": "2026-09-07",
+          "url": "https://apps.apple.com/gb/app/hanyu-learn-chinese-mandarin/id6760541929?uo=4",
+          "body": "Hanyu includes fixes for Listening Practice to ensure the Next button is always reachable on smaller screens. Every lesson line now features a tap-to-hear button for easier audio playback."
+        }
+      ],
+      "principles": {
+        "free": "Every Opticell app is free to download. You can install our software and test it on your own device without providing any card details or committing to a purchase. This allows you to judge the utility of the tool before deciding to unlock its full features.",
+        "upgrades": "You can choose between an ultra-affordable subscription or a one-time lifetime unlock. Both options are entirely opt-in. Subscriptions can be managed or cancelled at any time through your Apple or Google account settings.",
+        "pricing": "We believe you should know the cost before you commit. Every price is clearly visible on the App Store and Google Play product pages before installation. We also show all costs within the app itself, with no hidden fees or fine print.",
+        "privacy": "Privacy is our default setting. We do not use analytics to track your usage, nor do we sell information to advertisers or data brokers. Your data stays on your device where it belongs.",
+        "ads": "Our apps contain no banners, interstitials, or sponsored content. Advertisements compete for your attention and create an incentive for apps to harvest user data. We avoid this model entirely to keep our software focused and clean.",
+        "partnership": "Where our apps use AI, the technology is designed to extend human capability rather than replace human judgement. The software acts as a tool to assist your workflow, ensuring that you always remain in control of the final outcome.",
+        "audience": "Our catalogue provides tools for both personal use and professional environments on the same terms. Whether you are using DrawPad for creative work or My Business Portal for organisation, you receive the same honest service."
+      }
+    },
     {
       "id": "2026-09-08",
       "kind": "workshop",
