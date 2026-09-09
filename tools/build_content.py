@@ -102,17 +102,20 @@ GITHUB_API = "https://api.github.com"
 # `drawpad-assets` really is just brand art. Anything not listed falls to the
 # heuristic in classify_repo(), so a new repo appears on the site by itself
 # rather than silently vanishing.
+# `compact` groups render as a row of plain names rather than full cards: they
+# are real and worth listing, but ten image folders should not take up a third
+# of the section and crowd out the three repos a stranger could actually use.
 REPO_GROUPS = [
     ("tools", "Open tools",
      "Things you can run, read or build on \u2014 not just look at.",
-     {"myllm-connect", "myllm-skills", "workflow-agent-bridge"}),
+     {"myllm-connect", "myllm-skills", "workflow-agent-bridge"}, False),
     ("content", "Live app content",
      "Our apps fetch their catalogues from these, in the open. What you see here "
      "is what the app sees.",
-     {"egrid-content", "hanyu-packs", "dice-assets", "linkfindr-assets"}),
+     {"egrid-content", "hanyu-packs", "dice-assets", "linkfindr-assets"}, False),
     ("assets", "Site & brand assets",
      "Generated art, video and landing pages, served straight from the CDN.",
-     set()),          # the default bucket
+     set(), True),
 ]
 
 # Repos never shown, whatever the heuristic says. `TeamDzX/TeamDzX` is the
@@ -312,17 +315,26 @@ def fetch_releases(today: dt.date, window_days: int) -> list[Release]:
     return recent[:MAX_ITEMS]
 
 
-def classify_repo(name: str) -> str:
-    """Explicit map first, then a name heuristic so a repo added tomorrow still
-    lands somewhere sensible without anyone editing this file."""
-    for group_id, _label, _blurb, members in REPO_GROUPS:
+def classify_repo(name: str) -> str | None:
+    """Explicit map first, then the naming conventions we actually use.
+
+    Returns None for anything else, and None means NOT SHOWN. This is opt-in on
+    purpose: the earlier version defaulted an unrecognised repo into "Open
+    tools" -- the most prominent group -- so a scratch repo or a half-finished
+    experiment would self-publish to the company home page overnight. Being
+    absent from the site until someone classifies it is the safe failure; the
+    "see all on GitHub" link covers everything regardless.
+    """
+    for group_id, _label, _blurb, members, _compact in REPO_GROUPS:
         if name in members:
             return group_id
+    # Conventions we use deliberately, and which only ever land in the two
+    # lower-stakes groups. "Open tools" is explicit-only, always.
     if name.endswith(("-assets", "-landing")):
         return "assets"
     if name.endswith(("-content", "-packs")):
         return "content"
-    return "tools"
+    return None
 
 
 def fetch_repos() -> dict | None:
@@ -356,6 +368,7 @@ def fetch_repos() -> dict | None:
     buckets: dict[str, list[dict]] = {g[0]: [] for g in REPO_GROUPS}
     skipped_forks = 0
     undescribed = []
+    unclassified = []
     for repo in payload:
         if not isinstance(repo, dict) or repo.get("private"):
             continue
@@ -365,10 +378,14 @@ def fetch_repos() -> dict | None:
         if repo.get("fork"):
             skipped_forks += 1
             continue
+        group_id = classify_repo(name)
+        if group_id is None:
+            unclassified.append(name)
+            continue
         description = (repo.get("description") or "").strip()
         if not description:
             undescribed.append(name)
-        buckets[classify_repo(name)].append({
+        buckets[group_id].append({
             "name": name,
             "description": description,
             "language": (repo.get("language") or "").strip(),
@@ -383,13 +400,16 @@ def fetch_repos() -> dict | None:
         items.sort(key=lambda r: (r["stars"], r["pushedAt"] or ""), reverse=True)
 
     groups = [
-        {"id": gid, "label": label, "blurb": blurb, "items": buckets[gid]}
-        for gid, label, blurb, _members in REPO_GROUPS if buckets[gid]
+        {"id": gid, "label": label, "blurb": blurb,
+         "compact": compact, "items": buckets[gid]}
+        for gid, label, blurb, _members, compact in REPO_GROUPS if buckets[gid]
     ]
     total = sum(len(g["items"]) for g in groups)
     log(f"  {total} public repos in {len(groups)} group(s); {skipped_forks} fork(s) skipped")
     if undescribed:
         log(f"  no description on GitHub (shows as a bare name): {', '.join(undescribed)}")
+    if unclassified:
+        log(f"  NOT SHOWN, needs a group in REPO_GROUPS: {', '.join(unclassified)}")
     return {
         "user": GITHUB_USER,
         "profileUrl": f"https://github.com/{GITHUB_USER}",

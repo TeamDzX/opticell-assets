@@ -1,6 +1,6 @@
 {
   "schema": 2,
-  "generatedAt": "2026-09-09T20:12:16Z",
+  "generatedAt": "2026-09-09T20:25:10Z",
   "editions": [
     {
       "id": "2026-09-09",
@@ -94,6 +94,7 @@
         "id": "tools",
         "label": "Open tools",
         "blurb": "Things you can run, read or build on — not just look at.",
+        "compact": false,
         "items": [
           {
             "name": "myllm-connect",
@@ -125,6 +126,7 @@
         "id": "content",
         "label": "Live app content",
         "blurb": "Our apps fetch their catalogues from these, in the open. What you see here is what the app sees.",
+        "compact": false,
         "items": [
           {
             "name": "egrid-content",
@@ -164,6 +166,7 @@
         "id": "assets",
         "label": "Site & brand assets",
         "blurb": "Generated art, video and landing pages, served straight from the CDN.",
+        "compact": true,
         "items": [
           {
             "name": "opticell-assets",

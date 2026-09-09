@@ -112,9 +112,23 @@ which is the profile README that frames the list rather than an entry in it.
 Repos are sorted into three groups by `REPO_GROUPS` in the generator. The map is
 explicit because a name cannot tell you the difference that matters:
 `dice-assets` is the Dice app's live Pack Gallery backend, while
-`drawpad-assets` really is just brand art. Anything unlisted falls to a name
-heuristic, so a **new repo appears on the site by itself** — reclassify it with
-one line when it lands in the wrong group.
+`drawpad-assets` really is just brand art.
+
+**Showing a repo is opt-in.** Only the explicit map and two naming conventions
+we use deliberately (`*-assets`/`*-landing`, `*-content`/`*-packs`) place a repo
+automatically, and those only ever reach the two lower-stakes groups. *Open
+tools is explicit-only.* Anything else is **not shown**, and the generator names
+it in the log so you know one is waiting.
+
+That default was the other way round at first, and it was wrong: an
+unrecognised repo landed in Open tools — the most prominent group — so a scratch
+repo or a half-finished experiment would have self-published to the company home
+page overnight. Being absent until someone classifies it is the safe failure,
+and the "see all on GitHub" link covers everything regardless.
+
+Groups marked `compact` render as a row of plain names rather than full cards.
+The ten asset repos are real and worth listing, but as full cards they took up a
+third of the section and crowded out the three repos a stranger could use.
 
 **A description on GitHub is a description on the website.** A repo with none
 renders as a bare name. Run the generator and it names the offenders.

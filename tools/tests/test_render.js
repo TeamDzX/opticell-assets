@@ -149,6 +149,11 @@ const liveDoc = {
           url: 'javascript:alert(1)' },
         { name: '', description: 'no name', url: 'https://github.com/TeamDzX/x' },
       ] },
+      { id: 'assets', label: 'Site & brand', blurb: '', compact: true, items: [
+        { name: 'cmp-assets', description: 'Art.', url: 'https://github.com/TeamDzX/cmp-assets' },
+        { name: 'egrid-assets', description: '', url: 'https://github.com/TeamDzX/egrid-assets' },
+        { name: 'bad', description: '', url: 'http://evil.example/x' },
+      ] },
       { id: 'empty', label: 'Nothing here', blurb: '', items: [] },
     ],
   };
@@ -156,7 +161,16 @@ const liveDoc = {
   ({ els } = await run({ payload: { editions: [liveDoc.editions[0]], repos: REPOS } }));
   check('repos render with only an EXPIRED edition', els.opensource.hidden === false);
   check('strip still hidden in that case', els.workshop.hidden === true);
-  check('empty group produced no block', els.osGroups.children.length === 1);
+  check('empty group produced no block', els.osGroups.children.length === 2);
+
+  // compact group: chips, not cards
+  const compactGrid = els.osGroups.children[1].children[1];
+  check('compact group uses os-chips', compactGrid.className === 'os-chips');
+  check('three chips rendered', compactGrid.children.length === 3);
+  check('https chip is a link', compactGrid.children[0].tagName === 'A');
+  check('non-https chip is not a link', compactGrid.children[2].tagName === 'SPAN');
+  check('full group still uses os-grid',
+    els.osGroups.children[0].children[1].className === 'os-grid');
   const grid = els.osGroups.children[0].children[1];
   check('two valid repos rendered (blank name skipped)', grid.children.length === 2);
   check('https repo became a link', grid.children[0].tagName === 'A');
