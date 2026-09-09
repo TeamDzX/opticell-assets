@@ -1,6 +1,6 @@
 {
-  "schema": 1,
-  "generatedAt": "2026-09-09T12:28:19Z",
+  "schema": 2,
+  "generatedAt": "2026-09-09T20:11:32Z",
   "editions": [
     {
       "id": "2026-09-09",
@@ -9,8 +9,15 @@
       "publishedAt": "2026-09-09T00:00:00Z",
       "expiresAt": "2026-09-19T00:00:00Z",
       "dateline": "9 September 2026",
-      "intro": "Recent updates to our apps focus on improving usability and fixing reported issues across our macOS and mobile software.",
+      "intro": "Recently out of the workshop: LinkFindr, Project Manager and MyLLM.",
       "items": [
+        {
+          "app": "LinkFindr",
+          "version": "2.3",
+          "date": "2026-09-09",
+          "url": "https://apps.apple.com/gb/app/linkfindr/id6760857542?uo=4",
+          "body": "LinkFindr 2.3 is live on the App Store, released 9 September 2026."
+        },
         {
           "app": "Project Manager",
           "version": "4.4",
@@ -24,13 +31,6 @@
           "date": "2026-09-08",
           "url": "https://apps.apple.com/gb/app/myllm-local-ai-agent/id6760704297?uo=4",
           "body": "MyLLM now displays on-device replies as they are being written. The app remains responsive and scrollable while the model is generating text, and you can stop a response at any time."
-        },
-        {
-          "app": "Hanyu",
-          "version": "3.2.5",
-          "date": "2026-09-07",
-          "url": "https://apps.apple.com/gb/app/hanyu-learn-chinese-mandarin/id6760541929?uo=4",
-          "body": "Hanyu includes fixes for Listening Practice to ensure the Next button is always reachable on smaller screens. Every lesson line now features a tap-to-hear button for easier audio playback."
         }
       ],
       "principles": {
@@ -84,5 +84,169 @@
         "audience": "Our catalogue provides tools for both personal use and professional environments on the same terms. Whether you are using DrawPad for creative work or My Business Portal for organisation, you receive the same honest service."
       }
     }
-  ]
+  ],
+  "repos": {
+    "user": "TeamDzX",
+    "profileUrl": "https://github.com/TeamDzX",
+    "total": 17,
+    "groups": [
+      {
+        "id": "tools",
+        "label": "Open tools",
+        "blurb": "Things you can run, read or build on — not just look at.",
+        "items": [
+          {
+            "name": "myllm-connect",
+            "description": "Run your own private AI backend on Mac/PC and connect MyLLM in one tap over trusted HTTPS (Tailscale). The free onramp to the paid iOS app.",
+            "language": "Rust",
+            "stars": 4,
+            "pushedAt": "2026-06-10",
+            "url": "https://github.com/TeamDzX/myllm-connect"
+          },
+          {
+            "name": "myllm-skills",
+            "description": "Curated open Agent-Skill format skills for MyLLM (the on-device iOS AI agent). Install with /skill add teamdzx/myllm-skills.",
+            "language": "Python",
+            "stars": 2,
+            "pushedAt": "2026-07-24",
+            "url": "https://github.com/TeamDzX/myllm-skills"
+          },
+          {
+            "name": "workflow-agent-bridge",
+            "description": "Agent bridge + MCP server for the WorkFlow task manager: lets Claude Code read and write tasks, file hand-offs and keep a session log.",
+            "language": "Python",
+            "stars": 0,
+            "pushedAt": "2026-09-09",
+            "url": "https://github.com/TeamDzX/workflow-agent-bridge"
+          }
+        ]
+      },
+      {
+        "id": "content",
+        "label": "Live app content",
+        "blurb": "Our apps fetch their catalogues from these, in the open. What you see here is what the app sees.",
+        "items": [
+          {
+            "name": "egrid-content",
+            "description": "Catalogue and editorial content for the E-Grid motorsport companion app — channels, track guides, driver bios, team profiles and broadcast listings. Fetched at runtime so corrections ship without an App Store submission.",
+            "language": "Python",
+            "stars": 0,
+            "pushedAt": "2026-09-09",
+            "url": "https://github.com/TeamDzX/egrid-content"
+          },
+          {
+            "name": "hanyu-packs",
+            "description": "Free over-the-air content packs for the Hanyu iOS app — characters, compound words, sentences and bespoke lessons, shipped without an App Store submission.",
+            "language": "Python",
+            "stars": 0,
+            "pushedAt": "2026-09-08",
+            "url": "https://github.com/TeamDzX/hanyu-packs"
+          },
+          {
+            "name": "dice-assets",
+            "description": "Store backend for the Dice iOS app Pack Gallery",
+            "language": "Python",
+            "stars": 0,
+            "pushedAt": "2026-07-17",
+            "url": "https://github.com/TeamDzX/dice-assets"
+          },
+          {
+            "name": "linkfindr-assets",
+            "description": "Content backend for the LinkFindr iOS app (Starter Packs catalog) — served via raw.githubusercontent",
+            "language": "",
+            "stars": 0,
+            "pushedAt": "2026-07-06",
+            "url": "https://github.com/TeamDzX/linkfindr-assets"
+          }
+        ]
+      },
+      {
+        "id": "assets",
+        "label": "Site & brand assets",
+        "blurb": "Generated art, video and landing pages, served straight from the CDN.",
+        "items": [
+          {
+            "name": "opticell-assets",
+            "description": "Generated visual assets for the Opticell marketing site (home page hero & section art). Hot-linked via raw.githubusercontent.",
+            "language": "Python",
+            "stars": 0,
+            "pushedAt": "2026-09-09",
+            "url": "https://github.com/TeamDzX/opticell-assets"
+          },
+          {
+            "name": "myllm-assets",
+            "description": "Generated visual assets for the MyLLM site and marketplace (banners, art). Hot-linked via raw.githubusercontent.",
+            "language": "HTML",
+            "stars": 0,
+            "pushedAt": "2026-09-06",
+            "url": "https://github.com/TeamDzX/myllm-assets"
+          },
+          {
+            "name": "drawpad-assets",
+            "description": "DrawPad shared brand assets (app icon, logos) served via jsDelivr CDN",
+            "language": "Python",
+            "stars": 0,
+            "pushedAt": "2026-08-25",
+            "url": "https://github.com/TeamDzX/drawpad-assets"
+          },
+          {
+            "name": "egrid-assets",
+            "description": "Generated visual assets for the E-Grid landing site (animated header banner). Served via jsDelivr CDN.",
+            "language": "Shell",
+            "stars": 0,
+            "pushedAt": "2026-08-02",
+            "url": "https://github.com/TeamDzX/egrid-assets"
+          },
+          {
+            "name": "workflow-landing-assets",
+            "description": "Landing page source and generated marketing imagery for WorkFlow, the Project Manager app — served to the live site via jsDelivr.",
+            "language": "HTML",
+            "stars": 0,
+            "pushedAt": "2026-07-19",
+            "url": "https://github.com/TeamDzX/workflow-landing-assets"
+          },
+          {
+            "name": "runfindr-assets",
+            "description": "Generated video/image assets for the RunFindr landing site (feature-card loop clips). Hot-linked via raw.githubusercontent.",
+            "language": "HTML",
+            "stars": 0,
+            "pushedAt": "2026-07-10",
+            "url": "https://github.com/TeamDzX/runfindr-assets"
+          },
+          {
+            "name": "linkfindr-landing",
+            "description": "LinkFindr landing page + assets (served to the Wix site via jsDelivr CDN)",
+            "language": "HTML",
+            "stars": 0,
+            "pushedAt": "2026-07-06",
+            "url": "https://github.com/TeamDzX/linkfindr-landing"
+          },
+          {
+            "name": "drawpad-landing",
+            "description": "DrawPad landing page + image assets (served to the Wix site via jsDelivr CDN)",
+            "language": "HTML",
+            "stars": 0,
+            "pushedAt": "2026-06-29",
+            "url": "https://github.com/TeamDzX/drawpad-landing"
+          },
+          {
+            "name": "htmleditor-assets",
+            "description": "Generated visual assets for the HTML Editor (macOS) landing site. Hot-linked via raw.githubusercontent.",
+            "language": "",
+            "stars": 0,
+            "pushedAt": "2026-06-28",
+            "url": "https://github.com/TeamDzX/htmleditor-assets"
+          },
+          {
+            "name": "cmp-assets",
+            "description": "Generated visual assets for the Business Dashboard site (hero art, template-pack covers). Hot-linked via raw.githubusercontent.",
+            "language": "Python",
+            "stars": 0,
+            "pushedAt": "2026-06-12",
+            "url": "https://github.com/TeamDzX/cmp-assets"
+          }
+        ]
+      }
+    ]
+  }
 }

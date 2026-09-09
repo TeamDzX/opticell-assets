@@ -97,6 +97,34 @@ fair" — the first live run turned "Transparent Pricing" into a restatement of
 "Optional Upgrades", leaving two of the seven cards saying the same thing.
 Change a card's subject there, not in the prompt.
 
+### `repos` — the public GitHub presence
+
+`content.json` also carries a top-level `repos` block that drives the **Open
+Source** section of home.html. It is deliberately *outside* `editions`: the
+GitHub presence is a standing fact, not news, so it must not disappear when a
+workshop strip expires.
+
+Facts only — names, descriptions, languages, stars and push dates all come
+straight from the GitHub API, so no model is involved and nothing needs
+guarding. Forks are excluded (other people's work), as is `TeamDzX/TeamDzX`,
+which is the profile README that frames the list rather than an entry in it.
+
+Repos are sorted into three groups by `REPO_GROUPS` in the generator. The map is
+explicit because a name cannot tell you the difference that matters:
+`dice-assets` is the Dice app's live Pack Gallery backend, while
+`drawpad-assets` really is just brand art. Anything unlisted falls to a name
+heuristic, so a **new repo appears on the site by itself** — reclassify it with
+one line when it lands in the wrong group.
+
+**A description on GitHub is a description on the website.** A repo with none
+renders as a bare name. Run the generator and it names the offenders.
+
+> **Never rename the account or a content repo.** Installed copies of E-Grid,
+> MyLLM, LinkFindr and Dice fetch from `raw.githubusercontent.com/TeamDzX/…`.
+> A rename breaks every one of them, in every installed app, with no way back
+> short of an App Store submission. The GitHub *display name* is cosmetic and
+> safe to change; the account and repo names are load-bearing.
+
 ### Failure is designed in
 
 Every failure path leaves the page exactly as it shipped:

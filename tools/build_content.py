@@ -85,6 +85,40 @@ DEFAULT_WINDOW_DAYS = 45
 MAX_ITEMS = 3
 
 USER_AGENT = "Opticell-content/1.0 (+https://www.opticell-limited.com)"
+
+# --- The public GitHub presence ------------------------------------------- #
+# `TeamDzX` is a personal account, and it must NOT be renamed: E-Grid, MyLLM,
+# LinkFindr, Dice and this site all fetch live content from
+# raw.githubusercontent.com/TeamDzX/..., so a rename breaks every installed
+# app. The display name is cosmetic and safe; the account name is load-bearing.
+GITHUB_USER = "TeamDzX"
+GITHUB_API = "https://api.github.com"
+
+# Repos are sorted into three groups. Forks are left out entirely -- they are
+# other people's work and read as padding on a company page.
+#
+# The map is explicit because a name cannot tell you the difference that
+# matters: `dice-assets` is the Dice app's live Pack Gallery backend, while
+# `drawpad-assets` really is just brand art. Anything not listed falls to the
+# heuristic in classify_repo(), so a new repo appears on the site by itself
+# rather than silently vanishing.
+REPO_GROUPS = [
+    ("tools", "Open tools",
+     "Things you can run, read or build on \u2014 not just look at.",
+     {"myllm-connect", "myllm-skills", "workflow-agent-bridge"}),
+    ("content", "Live app content",
+     "Our apps fetch their catalogues from these, in the open. What you see here "
+     "is what the app sees.",
+     {"egrid-content", "hanyu-packs", "dice-assets", "linkfindr-assets"}),
+    ("assets", "Site & brand assets",
+     "Generated art, video and landing pages, served straight from the CDN.",
+     set()),          # the default bucket
+]
+
+# Repos never shown, whatever the heuristic says. `TeamDzX/TeamDzX` is the
+# profile README that renders at the top of github.com/TeamDzX -- it is the
+# frame around the list, not an entry in it.
+REPO_EXCLUDE = {GITHUB_USER}
 TIMEOUT = 20
 
 # The seven manifesto cards in home.html, keyed exactly as `data-modal` and the
@@ -276,6 +310,92 @@ def fetch_releases(today: dt.date, window_days: int) -> list[Release]:
     recent = [r for r in releases if r.date >= cutoff and r.name and r.version]
     log(f"  {len(releases)} apps on the account, {len(recent)} updated since {cutoff}")
     return recent[:MAX_ITEMS]
+
+
+def classify_repo(name: str) -> str:
+    """Explicit map first, then a name heuristic so a repo added tomorrow still
+    lands somewhere sensible without anyone editing this file."""
+    for group_id, _label, _blurb, members in REPO_GROUPS:
+        if name in members:
+            return group_id
+    if name.endswith(("-assets", "-landing")):
+        return "assets"
+    if name.endswith(("-content", "-packs")):
+        return "content"
+    return "tools"
+
+
+def fetch_repos() -> dict | None:
+    """Every public, non-fork repo on the account, grouped for the site.
+
+    Facts only -- names, descriptions, languages, stars, push dates all come
+    from GitHub. No model is involved here and nothing needs guarding.
+
+    Uses GITHUB_TOKEN when present (the Action supplies one). Unauthenticated
+    is 60 requests/hour per IP, and Actions runners share addresses, so a busy
+    morning could otherwise 403 this.
+    """
+    url = f"{GITHUB_API}/users/{GITHUB_USER}/repos?per_page=100&type=owner&sort=pushed"
+    headers = {"User-Agent": USER_AGENT, "Accept": "application/vnd.github+json"}
+    token = os.environ.get("GITHUB_TOKEN", "").strip()
+    if token:
+        headers["Authorization"] = "Bearer " + token
+
+    request = urllib.request.Request(url, headers=headers)
+    try:
+        with urllib.request.urlopen(request, timeout=TIMEOUT) as response:
+            payload = json.load(response)
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError,
+            OSError, json.JSONDecodeError) as error:
+        log(f"  GitHub repo list failed: {type(error).__name__}: {error}")
+        return None
+    if not isinstance(payload, list):
+        log("  GitHub repo list was not a list")
+        return None
+
+    buckets: dict[str, list[dict]] = {g[0]: [] for g in REPO_GROUPS}
+    skipped_forks = 0
+    undescribed = []
+    for repo in payload:
+        if not isinstance(repo, dict) or repo.get("private"):
+            continue
+        name = repo.get("name") or ""
+        if not name or name in REPO_EXCLUDE:
+            continue
+        if repo.get("fork"):
+            skipped_forks += 1
+            continue
+        description = (repo.get("description") or "").strip()
+        if not description:
+            undescribed.append(name)
+        buckets[classify_repo(name)].append({
+            "name": name,
+            "description": description,
+            "language": (repo.get("language") or "").strip(),
+            "stars": int(repo.get("stargazers_count") or 0),
+            "pushedAt": (repo.get("pushed_at") or "")[:10],
+            "url": repo.get("html_url") or f"https://github.com/{GITHUB_USER}/{name}",
+        })
+
+    # Stars first (the strongest signal a repo is worth a stranger's time),
+    # then most recently pushed.
+    for items in buckets.values():
+        items.sort(key=lambda r: (r["stars"], r["pushedAt"] or ""), reverse=True)
+
+    groups = [
+        {"id": gid, "label": label, "blurb": blurb, "items": buckets[gid]}
+        for gid, label, blurb, _members in REPO_GROUPS if buckets[gid]
+    ]
+    total = sum(len(g["items"]) for g in groups)
+    log(f"  {total} public repos in {len(groups)} group(s); {skipped_forks} fork(s) skipped")
+    if undescribed:
+        log(f"  no description on GitHub (shows as a bare name): {', '.join(undescribed)}")
+    return {
+        "user": GITHUB_USER,
+        "profileUrl": f"https://github.com/{GITHUB_USER}",
+        "total": total,
+        "groups": groups,
+    }
 
 
 def clean_notes(notes: str) -> str:
@@ -682,18 +802,33 @@ def build_edition(today: dt.date, window_days: int, use_llm: bool,
     }
 
 
-def merge(existing: dict, edition: dict) -> dict:
-    """Newest first, one edition per id, the last KEEP_EDITIONS kept."""
+def merge(existing: dict, edition: dict, repos: dict | None) -> dict:
+    """Newest first, one edition per id, the last KEEP_EDITIONS kept.
+
+    `repos` sits at the TOP LEVEL, deliberately outside `editions`: the GitHub
+    presence is a standing fact, not news, and must not disappear when the
+    workshop strip expires. A failed fetch carries the previous block forward
+    rather than emptying the section.
+    """
     editions = [e for e in existing.get("editions", [])
                 if isinstance(e, dict) and e.get("id") != edition["id"]]
     editions.insert(0, edition)
     editions.sort(key=lambda e: str(e.get("id", "")), reverse=True)
     now = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
-    return {
-        "schema": 1,
+
+    if repos is None:
+        repos = existing.get("repos")
+        if isinstance(repos, dict):
+            log("  carrying forward the previous repo list")
+
+    document = {
+        "schema": 2,
         "generatedAt": now.replace("+00:00", "Z"),
         "editions": editions[:KEEP_EDITIONS],
     }
+    if isinstance(repos, dict) and repos.get("groups"):
+        document["repos"] = repos
+    return document
 
 
 def main() -> int:
@@ -704,6 +839,8 @@ def main() -> int:
     parser.add_argument("--days", type=int, default=DEFAULT_WINDOW_DAYS,
                         help=f"how far back an update counts (default {DEFAULT_WINDOW_DAYS})")
     parser.add_argument("--no-llm", action="store_true", help="templated prose only")
+    parser.add_argument("--no-repos", action="store_true",
+                        help="skip the GitHub repo list; the previous one is kept")
     parser.add_argument("--no-principles", action="store_true",
                         help="build the strip only; leave home.html's manifesto copy alone")
     parser.add_argument("--dry-run", action="store_true", help="print, do not write")
@@ -751,7 +888,10 @@ def main() -> int:
         log("Nothing to publish: no recent releases and no principle copy.")
         return 1
 
-    document = merge(existing, edition)
+    log("GitHub:")
+    repos = None if args.no_repos else fetch_repos()
+
+    document = merge(existing, edition, repos)
     rendered = json.dumps(document, indent=2, ensure_ascii=False) + "\n"
 
     if args.dry_run:

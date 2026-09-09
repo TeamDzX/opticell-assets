@@ -9,6 +9,9 @@ if (start === -1) { console.error('could not find the dynamic-copy block'); proc
 const openIdx = HTML.indexOf('(function () {', start);
 const endIdx = HTML.indexOf('\n    })();', openIdx);
 const CODE = HTML.slice(openIdx, endIdx + '\n    })();'.length);
+if (!/function renderRepos/.test(CODE)) {
+  console.error('renderRepos is not inside the dynamic-copy block'); process.exit(1);
+}
 
 const fails = [];
 const check = (label, cond) => { if (!cond) fails.push(label); };
@@ -16,9 +19,11 @@ const check = (label, cond) => { if (!cond) fails.push(label); };
 function makeEl(id) {
   const el = {
     id, hidden: true, textContent: '', children: [], className: '',
-    _classes: new Set(),
+    _classes: new Set(), _attrs: {},
     classList: { add(c) { el._classes.add(c); }, contains: c => el._classes.has(c) },
     appendChild(c) { el.children.push(c); return c; },
+    setAttribute(k, v) { el._attrs[k] = String(v); },
+    getAttribute(k) { return el._attrs[k]; },
     set innerHTML(v) { fails.push(`innerHTML written on #${id}: ${String(v).slice(0, 60)}`); },
     get innerHTML() { return ''; },
   };
@@ -32,11 +37,16 @@ function run({ payload, fetchFails = false }) {
     workshopItems: makeEl('workshopItems'),
     workshopIntro: makeEl('workshopIntro'),
     workshopDateline: makeEl('workshopDateline'),
+    opensource: makeEl('opensource'),
+    osGroups: makeEl('osGroups'),
+    osProfile: makeEl('osProfile'),
+    osProfileLabel: makeEl('osProfileLabel'),
   };
   const events = [];
   const doc = {
     getElementById: id => els[id] || null,
-    createElement: tag => { const e = makeEl('<' + tag + '>'); e.tag = tag; return e; },
+    createElement: tag => { const e = makeEl('<' + tag + '>'); e.tag = tag; e.tagName = tag.toUpperCase(); return e; },
+    createTextNode: t => ({ text: String(t) }),
     addEventListener: () => {},
     dispatchEvent: e => { events.push(e); return true; },
   };
@@ -127,6 +137,39 @@ const liveDoc = {
     payload: { editions: [{ ...liveDoc.editions[1], intro: '   ' }] },
   }));
   check('blank intro stays hidden', els.workshop.hidden === true);
+
+  // ---- repos: top level, must render with NO live edition -----------------
+  const REPOS = {
+    user: 'TeamDzX', profileUrl: 'https://github.com/TeamDzX', total: 17,
+    groups: [
+      { id: 'tools', label: 'Open tools', blurb: 'Things you can run.', items: [
+        { name: 'myllm-connect', description: 'Private AI backend.', language: 'Rust',
+          stars: 4, pushedAt: '2026-06-10', url: 'https://github.com/TeamDzX/myllm-connect' },
+        { name: 'evil', description: 'x', language: '', stars: 0, pushedAt: '',
+          url: 'javascript:alert(1)' },
+        { name: '', description: 'no name', url: 'https://github.com/TeamDzX/x' },
+      ] },
+      { id: 'empty', label: 'Nothing here', blurb: '', items: [] },
+    ],
+  };
+
+  ({ els } = await run({ payload: { editions: [liveDoc.editions[0]], repos: REPOS } }));
+  check('repos render with only an EXPIRED edition', els.opensource.hidden === false);
+  check('strip still hidden in that case', els.workshop.hidden === true);
+  check('empty group produced no block', els.osGroups.children.length === 1);
+  const grid = els.osGroups.children[0].children[1];
+  check('two valid repos rendered (blank name skipped)', grid.children.length === 2);
+  check('https repo became a link', grid.children[0].tagName === 'A');
+  check('javascript: repo did NOT become a link', grid.children[1].tagName === 'DIV');
+  check('profile label counts the total', els.osProfileLabel.textContent === 'See all 17 repositories on GitHub');
+
+  // ---- repos absent or malformed: section stays hidden ---------------------
+  ({ els } = await run({ payload: { editions: [], repos: null } }));
+  check('no repos block -> section hidden', els.opensource.hidden === true);
+  ({ els } = await run({ payload: { editions: [], repos: { groups: [] } } }));
+  check('empty groups -> section hidden', els.opensource.hidden === true);
+  ({ els } = await run({ payload: { editions: [], repos: { groups: 'nope' } } }));
+  check('malformed groups -> section hidden', els.opensource.hidden === true);
 
   if (fails.length) {
     console.log(`FAIL (${fails.length})`);
