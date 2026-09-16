@@ -1,7 +1,48 @@
 {
   "schema": 2,
-  "generatedAt": "2026-09-15T12:52:19Z",
+  "generatedAt": "2026-09-16T12:48:19Z",
   "editions": [
+    {
+      "id": "2026-09-16",
+      "kind": "workshop",
+      "label": "from the workshop",
+      "publishedAt": "2026-09-16T00:00:00Z",
+      "expiresAt": "2026-09-26T00:00:00Z",
+      "dateline": "16 September 2026",
+      "intro": "Recent updates to our apps focus on improved efficiency and better reliability for your daily tasks.",
+      "items": [
+        {
+          "app": "Project Manager",
+          "version": "4.8",
+          "date": "2026-09-15",
+          "url": "https://apps.apple.com/gb/app/project-manager-workflow/id6761440692?uo=4",
+          "body": "Project Manager now offers a Daily Agenda setting. You can receive one summary notification per day instead of multiple alerts, showing only what is overdue or due."
+        },
+        {
+          "app": "MyLLM",
+          "version": "5.4.1",
+          "date": "2026-09-15",
+          "url": "https://apps.apple.com/gb/app/myllm-local-ai-agent/id6760704297?uo=4",
+          "body": "MyLLM now correctly identifies that larger models can run on 8 GB iPhones by accounting for iOS memory usage. Your chosen model choice also remains active between sessions."
+        },
+        {
+          "app": "E-Grid",
+          "version": "2.3.1",
+          "date": "2026-09-13",
+          "url": "https://apps.apple.com/gb/app/e-grid/id6761284626?uo=4",
+          "body": "E-Grid now provides Formula 1 results during live race weekends by using a secondary data source when the primary timing provider locks data during active sessions."
+        }
+      ],
+      "principles": {
+        "free": "Every Opticell app is free to download. You can install our software and test it on your own device without providing any card details or committing to a purchase. This allows you to judge the utility of the tool before deciding to unlock its full features.",
+        "upgrades": "You can choose between an ultra-affordable subscription or a one-time lifetime unlock. Both options are entirely opt-in. Subscriptions can be managed or cancelled at any time through your Apple or Google account settings.",
+        "pricing": "We believe you should know the cost before you commit. Every price is clearly visible on the App Store and Google Play product pages before installation. We also show all costs within the app itself, with no hidden fees or fine print.",
+        "privacy": "Privacy is our default setting. We do not use analytics to track your usage, nor do we sell information to advertisers or data brokers. Your data stays on your device where it belongs.",
+        "ads": "Our apps contain no banners, interstitials, or sponsored content. Advertisements compete for your attention and create an incentive for apps to harvest user data. We avoid this model entirely to keep our software focused and clean.",
+        "partnership": "Where our apps use AI, the technology is designed to extend human capability rather than replace human judgement. The software acts as a tool to assist your workflow, ensuring that you always remain in control of the final outcome.",
+        "audience": "Our catalogue provides tools for both personal use and professional environments on the same terms. Whether you are using DrawPad for creative work or My Business Portal for organisation, you receive the same honest service."
+      }
+    },
     {
       "id": "2026-09-15",
       "kind": "workshop",
@@ -124,47 +165,6 @@
         "partnership": "Where our apps use AI, the technology is designed to extend human capability rather than replace human judgement. The software acts as a tool to assist your workflow, ensuring that you always remain in control of the final outcome.",
         "audience": "Our catalogue provides tools for both personal use and professional environments on the same terms. Whether you are using DrawPad for creative work or My Business Portal for organisation, you receive the same honest service."
       }
-    },
-    {
-      "id": "2026-09-12",
-      "kind": "workshop",
-      "label": "from the workshop",
-      "publishedAt": "2026-09-12T00:00:00Z",
-      "expiresAt": "2026-09-22T00:00:00Z",
-      "dateline": "12 September 2026",
-      "intro": "Recent updates to our apps focus on improved model compatibility, more stable interface behaviour, and reliable iCloud syncing.",
-      "items": [
-        {
-          "app": "MyLLM",
-          "version": "5.3",
-          "date": "2026-09-11",
-          "url": "https://apps.apple.com/gb/app/myllm-local-ai-agent/id6760704297?uo=4",
-          "body": "MyLLM 5.3 is live on the App Store, released 11 September 2026."
-        },
-        {
-          "app": "Project Manager",
-          "version": "4.4.1",
-          "date": "2026-09-10",
-          "url": "https://apps.apple.com/gb/app/project-manager-workflow/id6761440692?uo=4",
-          "body": "Project Manager updates ensure the inbox list stays still while you read a conversation and allow you to reply without leaving the inbox."
-        },
-        {
-          "app": "LinkFindr",
-          "version": "2.3",
-          "date": "2026-09-09",
-          "url": "https://apps.apple.com/gb/app/linkfindr/id6760857542?uo=4",
-          "body": "LinkFindr now features working iCloud sync with a manual toggle, alongside an honest status line showing your current connection state."
-        }
-      ],
-      "principles": {
-        "free": "Every Opticell app is free to download. You can install our software and test it on your own device without providing any card details or committing to a purchase. This allows you to judge the utility of the tool before deciding to unlock its full features.",
-        "upgrades": "You can choose between an ultra-affordable subscription or a one-time lifetime unlock. Both options are entirely opt-in. Subscriptions can be managed or cancelled at any time through your Apple or Google account settings.",
-        "pricing": "We believe you should know the cost before you commit. Every price is clearly visible on the App Store and Google Play product pages before installation. We also show all costs within the app itself, with no hidden fees or fine print.",
-        "privacy": "Privacy is our default setting. We do not use analytics to track your usage, nor do we sell information to advertisers or data brokers. Your data stays on your device where it belongs.",
-        "ads": "Our apps contain no banners, interstitials, or sponsored content. Advertisements compete for your attention and create an incentive for apps to harvest user data. We avoid this model entirely to keep our software focused and clean.",
-        "partnership": "Where our apps use AI, the technology is designed to extend human capability rather than replace human judgement. The software acts as a tool to assist your workflow, ensuring that you always remain in control of the final outcome.",
-        "audience": "Our catalogue provides tools for both personal use and professional environments on the same terms. Whether you are using DrawPad for creative work or My Business Portal for organisation, you receive the same honest service."
-      }
     }
   ],
   "repos": {
@@ -215,7 +215,7 @@
             "description": "Catalogue and editorial content for the E-Grid motorsport companion app — channels, track guides, driver bios, team profiles and broadcast listings. Fetched at runtime so corrections ship without an App Store submission.",
             "language": "Python",
             "stars": 0,
-            "pushedAt": "2026-09-15",
+            "pushedAt": "2026-09-16",
             "url": "https://github.com/TeamDzX/egrid-content"
           },
           {
@@ -255,7 +255,7 @@
             "description": "Generated visual assets for the Opticell marketing site (home page hero & section art). Hot-linked via raw.githubusercontent.",
             "language": "Python",
             "stars": 0,
-            "pushedAt": "2026-09-14",
+            "pushedAt": "2026-09-15",
             "url": "https://github.com/TeamDzX/opticell-assets"
           },
           {
