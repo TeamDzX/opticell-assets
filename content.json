@@ -1,7 +1,48 @@
 {
   "schema": 2,
-  "generatedAt": "2026-09-25T12:56:46Z",
+  "generatedAt": "2026-09-26T12:24:10Z",
   "editions": [
+    {
+      "id": "2026-09-26",
+      "kind": "workshop",
+      "label": "from the workshop",
+      "publishedAt": "2026-09-26T00:00:00Z",
+      "expiresAt": "2026-10-06T00:00:00Z",
+      "dateline": "26 September 2026",
+      "intro": "Our latest updates focus on smarter routing in RunFindr, document libraries in Project Manager, and automated bot duties in MyLLM.",
+      "items": [
+        {
+          "app": "RunFindr",
+          "version": "2.1",
+          "date": "2026-09-26",
+          "url": "https://apps.apple.com/gb/app/runfindr/id6765964909?uo=4",
+          "body": "RunFindr now uses your preferences for road, trail, or mixed terrain to shape routes. You can also view time, distance, pace, and upcoming turns directly on your Lock Screen."
+        },
+        {
+          "app": "Project Manager",
+          "version": "5.0",
+          "date": "2026-09-25",
+          "url": "https://apps.apple.com/gb/app/project-manager-workflow/id6761440692?uo=4",
+          "body": "Project Manager now features a document library where every file has its own profile and number. You can manage versions by uploading new ones and restoring earlier drafts with a tap."
+        },
+        {
+          "app": "MyLLM",
+          "version": "5.7",
+          "date": "2026-09-25",
+          "url": "https://apps.apple.com/gb/app/myllm-local-ai-agent/id6760704297?uo=4",
+          "body": "MyLLM introduces Bots with specific duties and notebooks. You can @mention them in chats, and they can perform tasks like morning briefings while your phone is idle or charging."
+        }
+      ],
+      "principles": {
+        "free": "Every Opticell app is free to download. You can install our software and test it on your own device without providing any card details or committing to a purchase. This allows you to judge the utility of the tool before deciding to unlock its full features.",
+        "upgrades": "You can choose between an ultra-affordable subscription or a one-time lifetime unlock. Both options are entirely opt-in. Subscriptions can be managed or cancelled at any time through your Apple or Google account settings.",
+        "pricing": "We believe you should know the cost before you commit. Every price is clearly visible on the App Store and Google Play product pages before installation. We also show all costs within the app itself, with no hidden fees or fine print.",
+        "privacy": "Privacy is our default setting. We do not use analytics to track your usage, nor do we sell information to advertisers or data brokers. Your data stays on your device where it belongs.",
+        "ads": "Our apps contain no banners, interstitials, or sponsored content. Advertisements compete for your attention and create an incentive for apps to harvest user data. We avoid this model entirely to keep our software focused and clean.",
+        "partnership": "Where our apps use AI, the technology is designed to extend human capability rather than replace human judgement. The software acts as a tool to assist your workflow, ensuring that you always remain in control of the final outcome.",
+        "audience": "Our catalogue provides tools for both personal use and professional environments on the same terms. Whether you are using DrawPad for creative work or My Business Portal for organisation, you receive the same honest service."
+      }
+    },
     {
       "id": "2026-09-25",
       "kind": "workshop",
@@ -124,47 +165,6 @@
         "partnership": "Where our apps use AI, the technology is designed to extend human capability rather than replace human judgement. The software acts as a tool to assist your workflow, ensuring that you always remain in control of the final outcome.",
         "audience": "Our catalogue provides tools for both personal use and professional environments on the same terms. Whether you are using DrawPad for creative work or My Business Portal for organisation, you receive the same honest service."
       }
-    },
-    {
-      "id": "2026-09-22",
-      "kind": "workshop",
-      "label": "from the workshop",
-      "publishedAt": "2026-09-22T00:00:00Z",
-      "expiresAt": "2026-10-02T00:00:00Z",
-      "dateline": "22 September 2026",
-      "intro": "Our recent updates focus on improving transparency in MyLLM, expanding motorsport data in E-Grid, and adding file support to Project Manager.",
-      "items": [
-        {
-          "app": "MyLLM",
-          "version": "5.6.1",
-          "date": "2026-09-21",
-          "url": "https://apps.apple.com/gb/app/myllm-local-ai-agent/id6760704297?uo=4",
-          "body": "MyLLM now shows your progress during long conversations or tool calls. Tool responses are sized for your phone's memory, and the stop button works even while a tool is running."
-        },
-        {
-          "app": "E-Grid",
-          "version": "2.4",
-          "date": "2026-09-20",
-          "url": "https://apps.apple.com/gb/app/e-grid/id6761284626?uo=4",
-          "body": "E-Grid now includes season reviews and race summaries for Formula 1, MotoGP, and Formula E teams. Each page features team colours, photos, and official videos, updated every morning."
-        },
-        {
-          "app": "Project Manager",
-          "version": "4.9",
-          "date": "2026-09-19",
-          "url": "https://apps.apple.com/gb/app/project-manager-workflow/id6761440692?uo=4",
-          "body": "Project Manager now lets you attach photos, PDFs, and spreadsheets to your notes. We have also completed the full translation of the app into French, German, Spanish, and Japanese."
-        }
-      ],
-      "principles": {
-        "free": "Every Opticell app is free to download. You can install our software and test it on your own device without providing any card details or committing to a purchase. This allows you to judge the utility of the tool before deciding to unlock its full features.",
-        "upgrades": "You can choose between an ultra-affordable subscription or a one-time lifetime unlock. Both options are entirely opt-in. Subscriptions can be managed or cancelled at any time through your Apple or Google account settings.",
-        "pricing": "We believe you should know the cost before you commit. Every price is clearly visible on the App Store and Google Play product pages before installation. We also show all costs within the app itself, with no hidden fees or fine print.",
-        "privacy": "Privacy is our default setting. We do not use analytics to track your usage, nor do we sell information to advertisers or data brokers. Your data stays on your device where it belongs.",
-        "ads": "Our apps contain no banners, interstitials, or sponsored content. Advertisements compete for your attention and create an incentive for apps to harvest user data. We avoid this model entirely to keep our software focused and clean.",
-        "partnership": "Where our apps use AI, the technology is designed to extend human capability rather than replace human judgement. The software acts as a tool to assist your workflow, ensuring that you always remain in control of the final outcome.",
-        "audience": "Our catalogue provides tools for both personal use and professional environments on the same terms. Whether you are using DrawPad for creative work or My Business Portal for organisation, you receive the same honest service."
-      }
     }
   ],
   "repos": {
@@ -215,7 +215,7 @@
             "description": "Catalogue and editorial content for the E-Grid motorsport companion app — channels, track guides, driver bios, team profiles and broadcast listings. Fetched at runtime so corrections ship without an App Store submission.",
             "language": "Python",
             "stars": 0,
-            "pushedAt": "2026-09-25",
+            "pushedAt": "2026-09-26",
             "url": "https://github.com/TeamDzX/egrid-content"
           },
           {
@@ -251,20 +251,20 @@
         "compact": true,
         "items": [
           {
+            "name": "opticell-assets",
+            "description": "Generated visual assets for the Opticell marketing site (home page hero & section art). Hot-linked via raw.githubusercontent.",
+            "language": "Python",
+            "stars": 0,
+            "pushedAt": "2026-09-25",
+            "url": "https://github.com/TeamDzX/opticell-assets"
+          },
+          {
             "name": "myllm-assets",
             "description": "Generated visual assets for the MyLLM site and marketplace (banners, art). Hot-linked via raw.githubusercontent.",
             "language": "HTML",
             "stars": 0,
             "pushedAt": "2026-09-24",
             "url": "https://github.com/TeamDzX/myllm-assets"
-          },
-          {
-            "name": "opticell-assets",
-            "description": "Generated visual assets for the Opticell marketing site (home page hero & section art). Hot-linked via raw.githubusercontent.",
-            "language": "Python",
-            "stars": 0,
-            "pushedAt": "2026-09-24",
-            "url": "https://github.com/TeamDzX/opticell-assets"
           },
           {
             "name": "egrid-assets",
