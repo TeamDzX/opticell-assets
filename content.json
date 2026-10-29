@@ -1,7 +1,48 @@
 {
   "schema": 2,
-  "generatedAt": "2026-10-28T14:25:52Z",
+  "generatedAt": "2026-10-29T14:37:22Z",
   "editions": [
+    {
+      "id": "2026-10-29",
+      "kind": "workshop",
+      "label": "from the workshop",
+      "publishedAt": "2026-10-29T00:00:00Z",
+      "expiresAt": "2026-11-08T00:00:00Z",
+      "dateline": "29 October 2026",
+      "intro": "Three of our apps have had small, useful updates since the last time we wrote about them.",
+      "items": [
+        {
+          "app": "Project Manager",
+          "version": "5.6.1",
+          "date": "2026-10-28",
+          "url": "https://apps.apple.com/gb/app/project-manager-workflow/id6761440692?uo=4",
+          "body": "Project Manager now lets you answer an assistant's proposal straight from the notification, with a reason if you want. A drafted Mail reply can open the original message so your answer stays in the same thread."
+        },
+        {
+          "app": "MyLLM",
+          "version": "6.3",
+          "date": "2026-10-27",
+          "url": "https://apps.apple.com/gb/app/myllm-local-ai-agent/id6760704297?uo=4",
+          "body": "MyLLM can now work on code. Open a folder and ask for a fix or feature; it finds the right files, reads them and saves the change with a diff. You can undo or keep each edit. Add an AGENTS.md file to give it your project's rules."
+        },
+        {
+          "app": "Hanyu",
+          "version": "3.4",
+          "date": "2026-10-22",
+          "url": "https://apps.apple.com/gb/app/hanyu-learn-chinese-mandarin/id6760541929?uo=4",
+          "body": "Hanyu adds a Tone Trainer where you hear two-syllable words and see your own pitch drawn against the target. It also brings HSK 6 into the Pack Library and adds forty-eight idioms with their story and how to use them."
+        }
+      ],
+      "principles": {
+        "free": "Every Opticell app is free to download. You can install our software and test it on your own device without providing any card details or committing to a purchase. This allows you to judge the utility of the tool before deciding to unlock its full features.",
+        "upgrades": "You can choose between an ultra-affordable subscription or a one-time lifetime unlock. Both options are entirely opt-in. Subscriptions can be managed or cancelled at any time through your Apple or Google account settings.",
+        "pricing": "We believe you should know the cost before you commit. Every price is clearly visible on the App Store and Google Play product pages before installation. We also show all costs within the app itself, with no hidden fees or fine print.",
+        "privacy": "Privacy is our default setting. We do not use analytics to track your usage, nor do we sell information to advertisers or data brokers. Your data stays on your device where it belongs.",
+        "ads": "Our apps contain no banners, interstitials, or sponsored content. Advertisements compete for your attention and create an incentive for apps to harvest user data. We avoid this model entirely to keep our software focused and clean.",
+        "partnership": "Where our apps use AI, the technology is designed to extend human capability rather than replace human judgement. The software acts as a tool to assist your workflow, ensuring that you always remain in control of the final outcome.",
+        "audience": "Our catalogue provides tools for both personal use and professional environments on the same terms. Whether you are using DrawPad for creative work or My Business Portal for organisation, you receive the same honest service."
+      }
+    },
     {
       "id": "2026-10-28",
       "kind": "workshop",
@@ -124,47 +165,6 @@
         "partnership": "Where our apps use AI, the technology is designed to extend human capability rather than replace human judgement. The software acts as a tool to assist your workflow, ensuring that you always remain in control of the final outcome.",
         "audience": "Our catalogue provides tools for both personal use and professional environments on the same terms. Whether you are using DrawPad for creative work or My Business Portal for organisation, you receive the same honest service."
       }
-    },
-    {
-      "id": "2026-10-25",
-      "kind": "workshop",
-      "label": "from the workshop",
-      "publishedAt": "2026-10-25T00:00:00Z",
-      "expiresAt": "2026-11-04T00:00:00Z",
-      "dateline": "25 October 2026",
-      "intro": "Three Opticell apps reached the App Store this month, each fixing something real.",
-      "items": [
-        {
-          "app": "Project Manager",
-          "version": "5.5",
-          "date": "2026-10-23",
-          "url": "https://apps.apple.com/gb/app/project-manager-workflow/id6761440692?uo=4",
-          "body": "Project Manager now brings captured emails in properly. Headings, bold and links arrive in WorkFlow's own fonts and colours instead of code. Special characters survive, and shared email text comes through clean."
-        },
-        {
-          "app": "MyLLM",
-          "version": "6.2.1",
-          "date": "2026-10-23",
-          "url": "https://apps.apple.com/gb/app/myllm-local-ai-agent/id6760704297?uo=4",
-          "body": "MyLLM adds OpenCode Go, letting you use that subscription for GLM, Kimi, DeepSeek, Qwen, MiniMax and more by pasting your key. MiniMax now takes a Coding Plan key or a normal one, with reasoning kept out of the reply."
-        },
-        {
-          "app": "Hanyu",
-          "version": "3.4",
-          "date": "2026-10-22",
-          "url": "https://apps.apple.com/gb/app/hanyu-learn-chinese-mandarin/id6760541929?uo=4",
-          "body": "Hanyu adds a Tone Trainer where you hear two-syllable words, learn tone changes and see your pitch drawn against the target. It gains 48 idioms with stories and audio, plus HSK 6 to complete HSK 5."
-        }
-      ],
-      "principles": {
-        "free": "Every Opticell app is free to download. You can install our software and test it on your own device without providing any card details or committing to a purchase. This allows you to judge the utility of the tool before deciding to unlock its full features.",
-        "upgrades": "You can choose between an ultra-affordable subscription or a one-time lifetime unlock. Both options are entirely opt-in. Subscriptions can be managed or cancelled at any time through your Apple or Google account settings.",
-        "pricing": "We believe you should know the cost before you commit. Every price is clearly visible on the App Store and Google Play product pages before installation. We also show all costs within the app itself, with no hidden fees or fine print.",
-        "privacy": "Privacy is our default setting. We do not use analytics to track your usage, nor do we sell information to advertisers or data brokers. Your data stays on your device where it belongs.",
-        "ads": "Our apps contain no banners, interstitials, or sponsored content. Advertisements compete for your attention and create an incentive for apps to harvest user data. We avoid this model entirely to keep our software focused and clean.",
-        "partnership": "Where our apps use AI, the technology is designed to extend human capability rather than replace human judgement. The software acts as a tool to assist your workflow, ensuring that you always remain in control of the final outcome.",
-        "audience": "Our catalogue provides tools for both personal use and professional environments on the same terms. Whether you are using DrawPad for creative work or My Business Portal for organisation, you receive the same honest service."
-      }
     }
   ],
   "repos": {
@@ -215,7 +215,7 @@
             "description": "Catalogue and editorial content for the E-Grid motorsport companion app — channels, track guides, driver bios, team profiles and broadcast listings. Fetched at runtime so corrections ship without an App Store submission.",
             "language": "Python",
             "stars": 0,
-            "pushedAt": "2026-10-28",
+            "pushedAt": "2026-10-29",
             "url": "https://github.com/TeamDzX/egrid-content"
           },
           {
@@ -251,20 +251,20 @@
         "compact": true,
         "items": [
           {
+            "name": "opticell-assets",
+            "description": "Generated visual assets for the Opticell marketing site (home page hero & section art). Hot-linked via raw.githubusercontent.",
+            "language": "Python",
+            "stars": 0,
+            "pushedAt": "2026-10-28",
+            "url": "https://github.com/TeamDzX/opticell-assets"
+          },
+          {
             "name": "myllm-assets",
             "description": "Generated visual assets for the MyLLM site and marketplace (banners, art). Hot-linked via raw.githubusercontent.",
             "language": "HTML",
             "stars": 0,
             "pushedAt": "2026-10-27",
             "url": "https://github.com/TeamDzX/myllm-assets"
-          },
-          {
-            "name": "opticell-assets",
-            "description": "Generated visual assets for the Opticell marketing site (home page hero & section art). Hot-linked via raw.githubusercontent.",
-            "language": "Python",
-            "stars": 0,
-            "pushedAt": "2026-10-27",
-            "url": "https://github.com/TeamDzX/opticell-assets"
           },
           {
             "name": "drawpad-assets",
